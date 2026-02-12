@@ -10,116 +10,114 @@ public class Jeff {
                 + "_/ |             \n"
                 + "|__/         \n";
         System.out.println("Hello from\n" + logo);
-        // echo();
         run();
     }
 
-    // public static void echo() {
-    // while(true){
-    // String line;
-    // Scanner in = new Scanner(System.in);
-    // line = in.nextLine();
-    // System.out.println("______________________________________________" );
-    // System.out.println(" " +line);
-    // System.out.println("_______________________________________________" );
-    // }
-    // }
+    private static void printLine() {
+        System.out.println("______________________________________________");
+    }
+
     public static void run() {
         Task[] tasks = new Task[100];
-        int CountOfTasks = 0;
-        String line;
+        int countOfTasks = 0;
+
         Scanner in = new Scanner(System.in);
+
         while (true) {
-            line = in.nextLine();
-            System.out.println("______________________________________________");
-            if (line.equals("bye")) {
-                System.out.println(" Bye. Hope to see you again soon!");
-                break;
-            } else if (line.contains("mark")) {
-                if (line.contains("unmark")) {
-                    System.out.println("OK, I've marked this task as not done yet:");
-                    for (int i = 0; i < CountOfTasks; i++) {
-                        if (line.equals("unmark " + tasks[i].getTask())) {
-                            tasks[i].setStatus(false);
+            try {
+                String line = in.nextLine();
+                String trimmed = line.trim();
+                printLine();
+                if (trimmed.equals("bye")) {
+                    System.out.println(" Bye. Hope to see you again soon!");
+                    break;
+                } else if (line.contains("mark")) {
+                    if (line.contains("unmark")) {
+                        System.out.println("OK, I've marked this task as not done yet:");
+                        for (int i = 0; i < countOfTasks; i++) {
+                            if (line.equals("unmark " + tasks[i].getTask())) {
+                                tasks[i].setStatus(false);
+                            }
+                        }
+                    } else {
+                        System.out.println("Nice! I've marked this task as done:");
+                        for (int i = 0; i < countOfTasks; i++) {
+                            if (line.equals("mark " + tasks[i].getTask())) {
+                                tasks[i].setStatus(true);
+                            }
                         }
                     }
+                } else if (trimmed.equals("list")) {
+                    System.out.println("Here are the tasks in your list:");
+                    for (int i = 0; i < countOfTasks; i++) {
+                        System.out.println((i + 1) + ". " + tasks[i]);
+                    }
+                } else if (trimmed.startsWith("todo")) {
+                    String desc = "";
+                    if (trimmed.length() > 4) {
+                        desc = trimmed.substring(4).trim();
+                    }
+                    if (desc.isEmpty()) {
+                        throw new JeffException("OOPS!!! The description of a todo cannot be empty.");
+                    }
+
+                    if (countOfTasks >= tasks.length) {
+                        throw new JeffException("OOPS!!! Task list is full.");
+                    }
+
+                    Task t = new Todo(desc);
+                    tasks[countOfTasks++] = t;
+
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println("  " + t);
+                    System.out.println("Now you have " + countOfTasks + " tasks in the list");
+                    printLine();
+                    continue;
+                } else if (trimmed.startsWith("deadline ")) {
+
+                    String rest = line.substring(9);
+                    String[] parts = rest.split(" /by ");
+
+                    String task = parts[0];
+                    String by = parts[1];
+
+                    Deadline newTask = new Deadline(task, by);
+                    tasks[countOfTasks] = newTask;
+                    countOfTasks++;
+
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println("  " + newTask);
+                } else if (trimmed
+                        .startsWith("event ")) {
+
+                    String rest = line.substring(6);
+
+                    String[] parts1 = rest.split(" /from ");
+                    String task = parts1[0];
+
+                    String[] parts2 = parts1[1].split(" /to ");
+
+                    String from = parts2[0];
+                    String to = parts2[1];
+
+                    Event newTask = new Event(task, from, to);
+                    tasks[countOfTasks] = newTask;
+                    countOfTasks++;
+
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println("  " + newTask);
                 } else {
-                    System.out.println("Nice! I've marked this task as done:");
-                    for (int i = 0; i < CountOfTasks; i++) {
-                        if (line.equals("mark " + tasks[i].getTask())) {
-                            tasks[i].setStatus(true);
-                        }
-                    }
+                    throw new JeffException("OOPS!!! I'm sorry, but I don't know what that means :-(");
                 }
-            } else if (line.equals("list")) {
-                System.out.println("Here are the tasks in your list:");
-                for (int i = 0; i < CountOfTasks; i++) {
-                    System.out.println((i + 1) + ". " + tasks[i]);
-                }
-            } else if (line.startsWith("todo ")) {
-                String desc = line.substring(5);
-                Task t = new Todo(desc);
-                tasks[CountOfTasks] = t;
-                CountOfTasks++;
 
-                System.out.println("Got it. I've added this task:");
-                System.out.println("  " + t);
-            } else if (line.startsWith("todo ")) {
+                System.out.println("Now you have " + countOfTasks + " tasks in the list");
+                printLine();
 
-                String task = line.substring(5);
-
-                Todo newTask = new Todo(task);
-                tasks[CountOfTasks] = newTask;
-                CountOfTasks++;
-
-                System.out.println("Got it. I've added this task:");
-                System.out.println("  " + newTask);
+            } catch (JeffException e) {
+                System.out.println(" " + e.getMessage());
+                printLine();
             }
-
-            else if (line.startsWith("deadline ")) {
-
-                String rest = line.substring(9);
-                String[] parts = rest.split(" /by ");
-
-                String task = parts[0];
-                String by = parts[1];
-
-                Deadline newTask = new Deadline(task, by);
-                tasks[CountOfTasks] = newTask;
-                CountOfTasks++;
-
-                System.out.println("Got it. I've added this task:");
-                System.out.println("  " + newTask);
-            }
-
-            else if (line.startsWith("event ")) {
-
-                String rest = line.substring(6);
-
-                String[] parts1 = rest.split(" /from ");
-                String task = parts1[0];
-
-                String[] parts2 = parts1[1].split(" /to ");
-
-                String from = parts2[0];
-                String to = parts2[1];
-
-                Event newTask = new Event(task, from, to);
-                tasks[CountOfTasks] = newTask;
-                CountOfTasks++;
-
-                System.out.println("Got it. I've added this task:");
-                System.out.println("  " + newTask);
-            }
-
-            else {
-                Task NewTask = new Task(line, false);
-                tasks[CountOfTasks] = NewTask;
-                CountOfTasks++;
-                System.out.println(" Added: " + line);
-            }
-            System.out.println("Now you have " + CountOfTasks + " tasks in the list");
-            System.out.println("______________________________________________");
         }
     }
+
 }
