@@ -64,7 +64,6 @@ public class Jeff {
                     if (countOfTasks >= tasks.length) {
                         throw new JeffException("OOPS!!! Task list is full.");
                     }
-
                     Task t = new Todo(desc);
                     tasks[countOfTasks++] = t;
 
