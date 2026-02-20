@@ -1,5 +1,7 @@
 package jeff.command;
 
+import java.util.ArrayList;
+
 import jeff.exception.JeffException;
 import jeff.task.*;
 
@@ -13,29 +15,24 @@ public class MarkCommand extends Command {
     }
 
     @Override
-    public void execute(Task[] tasks, int[] taskCount) throws JeffException {
+    public void execute(ArrayList<Task> tasks) throws JeffException {
         if (taskName.isEmpty()) {
             throw new JeffException("OOPS!!! Please specify a task name, e.g. mark homework");
         }
 
-        boolean found = false;
-        for (int i = 0; i < taskCount[0]; i++) {
-            if (tasks[i] != null && taskName.equals(tasks[i].getTask())) {
-                tasks[i].setStatus(markDone);
-                found = true;
-
+        for (int i = 0; i < tasks.size(); i++) {
+            if (taskName.equals(tasks.get(i).getTask())) {
+                tasks.get(i).setStatus(markDone);
                 if (markDone) {
                     System.out.println("Nice! I've marked this task as done:");
                 } else {
-                    System.out.println("OK, I've marked this task as not done yet:");
+                System.out.println("OK, I've marked this task as not done yet:");
                 }
-                System.out.println("  " + tasks[i]);
-                break;
+                System.out.println("  " + tasks.get(i));
+                return;
             }
         }
 
-        if (!found) {
-            throw new JeffException("OOPS!!! I can't find a task named: " + taskName);
-        }
+    throw new JeffException("OOPS!!! I can't find a task named: " + taskName);
     }
 }
