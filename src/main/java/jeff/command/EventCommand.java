@@ -1,7 +1,10 @@
 package jeff.command;
 
+import java.util.ArrayList;
+
 import jeff.exception.JeffException;
-import jeff.task.*;
+import jeff.task.Event;
+import jeff.task.Task;
 
 public class EventCommand extends Command {
     private final String arguments;
@@ -11,7 +14,7 @@ public class EventCommand extends Command {
     }
 
     @Override
-    public void execute(Task[] tasks, int[] taskCount) throws JeffException {
+    public void execute(ArrayList<Task> tasks) throws JeffException {
         if (arguments.isEmpty()) {
             throw new JeffException("OOPS!!! The description of an event cannot be empty.");
         }
@@ -21,7 +24,7 @@ public class EventCommand extends Command {
             throw new JeffException("OOPS!!! Use: event <task> /from <start> /to <end>");
         }
 
-        String task = parts1[0].trim();
+        String desc = parts1[0].trim();
         String[] parts2 = parts1[1].split("\\s*/to\\s*", 2);
         if (parts2.length != 2) {
             throw new JeffException("OOPS!!! Use: event <task> /from <start> /to <end>");
@@ -30,21 +33,18 @@ public class EventCommand extends Command {
         String from = parts2[0].trim();
         String to = parts2[1].trim();
 
-        if (task.isEmpty()) {
+        if (desc.isEmpty()) {
             throw new JeffException("OOPS!!! The description of an event cannot be empty.");
         }
         if (from.isEmpty() || to.isEmpty()) {
             throw new JeffException("OOPS!!! The /from and /to of an event cannot be empty.");
         }
-        if (taskCount[0] >= tasks.length) {
-            throw new JeffException("OOPS!!! Task list is full.");
-        }
 
-        Task t = new Event(task, from, to);
-        tasks[taskCount[0]++] = t;
+        Task t = new Event(desc, from, to);
+        tasks.add(t);
 
         System.out.println("Got it. I've added this task:");
         System.out.println("  " + t);
-        System.out.println("Now you have " + taskCount[0] + " tasks in the list");
+        System.out.println("Now you have " + tasks.size() + " tasks in the list");
     }
 }

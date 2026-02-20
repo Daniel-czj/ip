@@ -5,7 +5,10 @@ import jeff.exception.JeffException;
 import jeff.parser.Parser;
 import jeff.task.Task;
 
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.ArrayList;
+
 
 public class Jeff {
     public static void main(String[] args) {
@@ -25,8 +28,8 @@ public class Jeff {
     }
 
     public static void run() {
-    Task[] tasks = new Task[100];
-    int[] countOfTasks = new int[]{0};
+    
+    ArrayList<Task> tasks = new ArrayList<>();
 
     Scanner in = new Scanner(System.in);
 
@@ -36,7 +39,7 @@ public class Jeff {
             printLine();
 
             Command cmd = Parser.parseCommand(line);
-            cmd.execute(tasks, countOfTasks);
+            cmd.execute(tasks);
 
             printLine();
             if (cmd.isExit()) {
