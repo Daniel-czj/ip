@@ -7,7 +7,6 @@ import jeff.task.Task;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.ArrayList;
 
 
 public class Jeff {
