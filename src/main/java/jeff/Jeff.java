@@ -3,11 +3,12 @@ package jeff;
 import jeff.command.Command;
 import jeff.exception.JeffException;
 import jeff.parser.Parser;
+import jeff.storage.Storage;
 import jeff.task.Task;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 
 public class Jeff {
     public static void main(String[] args) {
@@ -27,27 +28,45 @@ public class Jeff {
     }
 
     public static void run() {
-    
-    ArrayList<Task> tasks = new ArrayList<>();
+        Storage storage = new Storage("data", "jeff.txt");
 
-    Scanner in = new Scanner(System.in);
-
-    while (true) {
+        ArrayList<Task> tasks;
         try {
-            String line = in.nextLine();
-            printLine();
-
-            Command cmd = Parser.parseCommand(line);
-            cmd.execute(tasks);
-
-            printLine();
-            if (cmd.isExit()) {
-                break;
-            }
+            tasks = storage.loadTasks(); // ✅ load on startup
         } catch (JeffException e) {
-            System.out.println(" " + e.getMessage());
-            printLine();
+            System.out.println("Warning: could not load saved tasks. Starting with empty list.");
+            tasks = new ArrayList<>();
+        }   
+
+        Scanner in = new Scanner(System.in);
+
+        while (true) {
+            try {
+                String input = in.nextLine();
+                printLine();
+                Command c = Parser.parseCommand(input);
+                c.execute(tasks);
+
+                // ✅ auto-save after any mutating command
+                if (c.isMutating()) {
+                    storage.saveTasks(tasks);
+                }
+
+                if (c.isExit()) {
+                    break;
+                }
+                printLine();
+            } catch (JeffException e) {
+                printLine();
+                System.out.println(e.getMessage());
+                printLine();
+            } catch (IOException e) {
+                // save error
+                System.out.println("Warning: failed to save tasks: " + e.getMessage());
+                printLine();
+            }
         }
+
+        in.close();
     }
-}
 }

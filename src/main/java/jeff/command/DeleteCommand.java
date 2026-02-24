@@ -14,6 +14,11 @@ public class DeleteCommand extends Command {
     }
 
     @Override
+    public boolean isMutating() {
+        return true;
+    }
+
+    @Override
     public void execute(ArrayList<Task> tasks) throws JeffException {
         if (taskName.isEmpty()) {
             throw new JeffException("OOPS!!! Please specify a task name, e.g. delete homework");

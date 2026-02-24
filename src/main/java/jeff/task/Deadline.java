@@ -4,6 +4,10 @@ public class Deadline extends Task {
 
     protected String by;
 
+    public String getBy() {
+        return by;
+    }
+    
     public Deadline(String description, String by) {
         super(description,false);
         this.by = by;
