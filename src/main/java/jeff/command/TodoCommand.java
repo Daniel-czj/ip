@@ -12,6 +12,11 @@ public class TodoCommand extends Command {
     }
 
     @Override
+    public boolean isMutating() {
+        return true;
+    }
+
+    @Override
     public void execute(ArrayList<Task> tasks) throws JeffException {
         if (description.isEmpty()) {
             throw new JeffException("OOPS!!! The description of a todo cannot be empty.");

@@ -6,6 +6,10 @@ import java.util.ArrayList;
 
 public abstract class Command {
 
+    public boolean isMutating() {
+        return false;
+    }
+
     public abstract void execute(ArrayList<Task> tasks) throws JeffException;
 
     public boolean isExit() {

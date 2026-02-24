@@ -14,6 +14,11 @@ public class DeadlineCommand extends Command {
     }
 
     @Override
+    public boolean isMutating() {
+        return true;
+    }
+
+    @Override
     public void execute(ArrayList<Task> tasks) throws JeffException {
         if (arguments.isEmpty()) {
             throw new JeffException("OOPS!!! The description of a deadline cannot be empty.");
