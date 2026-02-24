@@ -32,7 +32,7 @@ public class Jeff {
 
         ArrayList<Task> tasks;
         try {
-            tasks = storage.loadTasks(); // ✅ load on startup
+            tasks = storage.loadTasks(); 
         } catch (JeffException e) {
             System.out.println("Warning: could not load saved tasks. Starting with empty list.");
             tasks = new ArrayList<>();
@@ -47,7 +47,6 @@ public class Jeff {
                 Command c = Parser.parseCommand(input);
                 c.execute(tasks);
 
-                // ✅ auto-save after any mutating command
                 if (c.isMutating()) {
                     storage.saveTasks(tasks);
                 }
