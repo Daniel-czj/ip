@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class Jeff {
     public static void main(String[] args) {
+        // Jeff task list application
         String logo = " (_)     / _|/ _|  \n"
                 + "  _  ___| |_| |_  \n"
                 + " | |/ _ \\  _|  _| \n"
