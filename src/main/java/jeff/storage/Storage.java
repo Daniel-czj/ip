@@ -115,7 +115,7 @@ public class Storage {
                     task = new Event(desc, parts[3], parts[4]);
                 }
                 default -> {
-                    return null; // unknown type => corrupted
+                    return null; 
                 }
             }
 
