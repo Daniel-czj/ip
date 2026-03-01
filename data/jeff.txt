@@ -5,3 +5,4 @@ T | 0 | Daniel: Answer CS2113 tutorial questions
 D | 0 | weekly CS2113 quiz | monday 9pm
 E | 0 | CS2113 lecture friday | 4 | 6pm
 T | 0 | read book
+D | 0 | return book | june 6th

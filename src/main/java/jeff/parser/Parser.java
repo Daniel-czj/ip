@@ -28,6 +28,7 @@ public class Parser {
         case "deadline" -> new DeadlineCommand(arguments);
         case "event" -> new EventCommand(arguments);
         case "delete" -> new DeleteCommand(arguments);
+        case "find" -> new FindCommand(arguments);
         default -> throw new JeffException("OOPS!!! I'm sorry, but I don't know what that means :-(");
         };
     }
