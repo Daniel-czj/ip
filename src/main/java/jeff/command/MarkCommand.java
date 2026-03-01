@@ -1,9 +1,11 @@
 package jeff.command;
 
-import java.util.ArrayList;
-
 import jeff.exception.JeffException;
-import jeff.task.*;
+import jeff.storage.Storage;
+import jeff.task.TaskList;
+import jeff.ui.Ui;
+
+import java.io.IOException;
 
 public class MarkCommand extends Command {
     private final String taskName;
@@ -15,12 +17,7 @@ public class MarkCommand extends Command {
     }
 
     @Override
-    public boolean isMutating() {
-        return true;
-    }
-
-    @Override
-    public void execute(ArrayList<Task> tasks) throws JeffException {
+    public void execute(TaskList tasks, Ui ui, Storage storage) throws JeffException, IOException {
         if (taskName.isEmpty()) {
             throw new JeffException("OOPS!!! Please specify a task name, e.g. mark homework");
         }
@@ -28,12 +25,8 @@ public class MarkCommand extends Command {
         for (int i = 0; i < tasks.size(); i++) {
             if (taskName.equals(tasks.get(i).getTask())) {
                 tasks.get(i).setStatus(markDone);
-                if (markDone) {
-                    System.out.println("Nice! I've marked this task as done:");
-                } else {
-                    System.out.println("OK, I've marked this task as not done yet:");
-                }
-                System.out.println("  " + tasks.get(i));
+                ui.showTaskMarked(tasks.get(i), markDone);
+                storage.saveTasks(tasks);
                 return;
             }
         }

@@ -2,6 +2,7 @@ package jeff.storage;
 
 import jeff.exception.JeffException;
 import jeff.task.*;
+import jeff.task.TaskList;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -55,10 +56,10 @@ public class Storage {
         return tasks;
     }
 
-    public void saveTasks(ArrayList<Task> tasks) throws IOException {
+    public void saveTasks(TaskList tasks) throws IOException {
         FileWriter fw = new FileWriter(filePath);
 
-        for (Task task : tasks) {
+        for (Task task : tasks.getAll()) {
             fw.write(serialize(task));
             fw.write(System.lineSeparator());
         }

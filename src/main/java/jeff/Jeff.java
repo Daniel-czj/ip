@@ -4,69 +4,50 @@ import jeff.command.Command;
 import jeff.exception.JeffException;
 import jeff.parser.Parser;
 import jeff.storage.Storage;
-import jeff.task.Task;
+import jeff.task.TaskList;
+import jeff.ui.Ui;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Jeff {
-    public static void main(String[] args) {
-    
-        String logo = " (_)     / _|/ _|  \n"
-                + "  _  ___| |_| |_  \n"
-                + " | |/ _ \\  _|  _| \n"
-                + " | |  __/ | | |  \n"
-                + " | |\\___|_| |_|   \n"
-                + "_/ |             \n"
-                + "|__/         \n";
-        System.out.println("Hello from\n" + logo);
-        run();
-    }
 
-    private static void printLine() {
-        System.out.println("______________________________________________");
-    }
+    private final Storage storage;
+    private TaskList tasks;
+    private final Ui ui;
 
-    public static void run() {
-        Storage storage = new Storage("data", "jeff.txt");
-
-        ArrayList<Task> tasks;
+    public Jeff(String folder, String fileName) {
+        ui = new Ui();
+        storage = new Storage(folder, fileName);
         try {
-            tasks = storage.loadTasks(); 
+            tasks = new TaskList(storage.loadTasks());
         } catch (JeffException e) {
-            System.out.println("Warning: could not load saved tasks. Starting with empty list.");
-            tasks = new ArrayList<>();
-        }   
+            ui.showLoadingError();
+            tasks = new TaskList();
+        }
+    }
 
-        Scanner in = new Scanner(System.in);
-
-        while (true) {
+    public void run() {
+        ui.showWelcome();
+        boolean isExit = false;
+        while (!isExit) {
             try {
-                String input = in.nextLine();
-                printLine();
+                String input = ui.readCommand();
+                ui.showLine();
                 Command c = Parser.parseCommand(input);
-                c.execute(tasks);
-
-                if (c.isMutating()) {
-                    storage.saveTasks(tasks);
-                }
-
-                if (c.isExit()) {
-                    break;
-                }
-                printLine();
+                c.execute(tasks, ui, storage);
+                isExit = c.isExit();
             } catch (JeffException e) {
-                printLine();
-                System.out.println(e.getMessage());
-                printLine();
+                ui.showError(e.getMessage());
             } catch (IOException e) {
-                // save error
-                System.out.println("Warning: failed to save tasks: " + e.getMessage());
-                printLine();
+                ui.showError("Warning: failed to save tasks: " + e.getMessage());
+            } finally {
+                ui.showLine();
             }
         }
+        ui.close();
+    }
 
-        in.close();
+    public static void main(String[] args) {
+        new Jeff("data", "jeff.txt").run();
     }
 }

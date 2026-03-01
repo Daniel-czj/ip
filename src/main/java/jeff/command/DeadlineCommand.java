@@ -1,10 +1,13 @@
 package jeff.command;
 
-import java.util.ArrayList;
-
 import jeff.exception.JeffException;
+import jeff.storage.Storage;
 import jeff.task.Deadline;
 import jeff.task.Task;
+import jeff.task.TaskList;
+import jeff.ui.Ui;
+
+import java.io.IOException;
 
 public class DeadlineCommand extends Command {
     private final String arguments;
@@ -14,12 +17,7 @@ public class DeadlineCommand extends Command {
     }
 
     @Override
-    public boolean isMutating() {
-        return true;
-    }
-
-    @Override
-    public void execute(ArrayList<Task> tasks) throws JeffException {
+    public void execute(TaskList tasks, Ui ui, Storage storage) throws JeffException, IOException {
         if (arguments.isEmpty()) {
             throw new JeffException("OOPS!!! The description of a deadline cannot be empty.");
         }
@@ -42,9 +40,7 @@ public class DeadlineCommand extends Command {
 
         Task t = new Deadline(desc, by);
         tasks.add(t);
-
-        System.out.println("Got it. I've added this task:");
-        System.out.println("  " + t);
-        System.out.println("Now you have " + tasks.size() + " tasks in the list");
+        ui.showTaskAdded(t, tasks.size());
+        storage.saveTasks(tasks);
     }
 }

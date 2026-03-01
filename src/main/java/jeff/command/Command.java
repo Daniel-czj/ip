@@ -1,16 +1,15 @@
 package jeff.command;
 
 import jeff.exception.JeffException;
-import jeff.task.*;
-import java.util.ArrayList;
+import jeff.storage.Storage;
+import jeff.task.TaskList;
+import jeff.ui.Ui;
+
+import java.io.IOException;
 
 public abstract class Command {
 
-    public boolean isMutating() {
-        return false;
-    }
-
-    public abstract void execute(ArrayList<Task> tasks) throws JeffException;
+    public abstract void execute(TaskList tasks, Ui ui, Storage storage) throws JeffException, IOException;
 
     public boolean isExit() {
         return false;

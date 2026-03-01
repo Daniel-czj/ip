@@ -1,9 +1,12 @@
 package jeff.command;
 
-import java.util.ArrayList;
-
 import jeff.exception.JeffException;
+import jeff.storage.Storage;
 import jeff.task.Task;
+import jeff.task.TaskList;
+import jeff.ui.Ui;
+
+import java.io.IOException;
 
 public class DeleteCommand extends Command {
 
@@ -14,12 +17,7 @@ public class DeleteCommand extends Command {
     }
 
     @Override
-    public boolean isMutating() {
-        return true;
-    }
-
-    @Override
-    public void execute(ArrayList<Task> tasks) throws JeffException {
+    public void execute(TaskList tasks, Ui ui, Storage storage) throws JeffException, IOException {
         if (taskName.isEmpty()) {
             throw new JeffException("OOPS!!! Please specify a task name, e.g. delete homework");
         }
@@ -37,9 +35,7 @@ public class DeleteCommand extends Command {
         }
 
         Task removed = tasks.remove(idx);
-
-        System.out.println("Noted. I've removed this task:");
-        System.out.println("  " + removed);
-        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+        ui.showTaskRemoved(removed, tasks.size());
+        storage.saveTasks(tasks);
     }
 }

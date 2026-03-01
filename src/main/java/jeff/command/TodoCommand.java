@@ -1,8 +1,13 @@
 package jeff.command;
 
-import java.util.ArrayList;
 import jeff.exception.JeffException;
-import jeff.task.*;
+import jeff.storage.Storage;
+import jeff.task.Task;
+import jeff.task.TaskList;
+import jeff.task.Todo;
+import jeff.ui.Ui;
+
+import java.io.IOException;
 
 public class TodoCommand extends Command {
     private final String description;
@@ -12,20 +17,13 @@ public class TodoCommand extends Command {
     }
 
     @Override
-    public boolean isMutating() {
-        return true;
-    }
-
-    @Override
-    public void execute(ArrayList<Task> tasks) throws JeffException {
+    public void execute(TaskList tasks, Ui ui, Storage storage) throws JeffException, IOException {
         if (description.isEmpty()) {
             throw new JeffException("OOPS!!! The description of a todo cannot be empty.");
         }
         Task t = new Todo(description);
         tasks.add(t);
-
-        System.out.println("Got it. I've added this task:");
-        System.out.println("  " + t);
-        System.out.println("Now you have " + tasks.size() + " tasks in the list");
+        ui.showTaskAdded(t, tasks.size());
+        storage.saveTasks(tasks);
     }
 }
