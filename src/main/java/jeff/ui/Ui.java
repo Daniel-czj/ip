@@ -31,7 +31,7 @@ public class Ui {
                 + " | |\\___|_| |_|   \n"
                 + "_/ |             \n"
                 + "|__/         \n";
-        System.out.println("Hello, My name \n" + logo);
+        System.out.println("Hello from\n" + logo);
     }
 
     /**
