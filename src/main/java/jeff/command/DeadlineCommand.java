@@ -9,13 +9,30 @@ import jeff.ui.Ui;
 
 import java.io.IOException;
 
+/**
+ * Represents the command that adds a new Deadline task.
+ */
 public class DeadlineCommand extends Command {
     private final String arguments;
 
+    /**
+     * Constructs a DeadlineCommand with the given argument string.
+     *
+     * @param arguments The raw arguments containing the description and /by time.
+     */
     public DeadlineCommand(String arguments) {
         this.arguments = arguments == null ? "" : arguments.trim();
     }
 
+    /**
+     * Executes the deadline command by parsing arguments and adding a Deadline task.
+     *
+     * @param tasks   The current list of tasks.
+     * @param ui      The UI handler for displaying confirmation.
+     * @param storage The storage handler for persisting the new task.
+     * @throws JeffException If the description or /by time is missing.
+     * @throws IOException   If saving to file fails.
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws JeffException, IOException {
         if (arguments.isEmpty()) {

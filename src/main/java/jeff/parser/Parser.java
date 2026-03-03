@@ -3,8 +3,18 @@ package jeff.parser;
 import jeff.command.*;
 import jeff.exception.JeffException;
 
+/**
+ * Parses user input and returns the corresponding {@link Command} object.
+ */
 public class Parser {
 
+    /**
+     * Parses the given user input string and returns the matching command.
+     *
+     * @param userInput The raw input string from the user.
+     * @return The {@link Command} corresponding to the user input.
+     * @throws JeffException If the input is null, empty, or an unrecognised command.
+     */
     public static Command parseCommand(String userInput) throws JeffException {
         if (userInput == null) {
             throw new JeffException("OOPS!!! I'm sorry, but I don't know what that means :-(");

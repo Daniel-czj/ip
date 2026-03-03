@@ -9,13 +9,30 @@ import jeff.ui.Ui;
 
 import java.io.IOException;
 
+/**
+ * Represents the command that adds a new Event task.
+ */
 public class EventCommand extends Command {
     private final String arguments;
 
+    /**
+     * Constructs an EventCommand with the given argument string.
+     *
+     * @param arguments The raw arguments containing the description, /from, and /to times.
+     */
     public EventCommand(String arguments) {
         this.arguments = arguments == null ? "" : arguments.trim();
     }
 
+    /**
+     * Executes the event command by parsing arguments and adding an Event task.
+     *
+     * @param tasks   The current list of tasks.
+     * @param ui      The UI handler for displaying confirmation.
+     * @param storage The storage handler for persisting the new task.
+     * @throws JeffException If the description, /from, or /to is missing.
+     * @throws IOException   If saving to file fails.
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws JeffException, IOException {
         if (arguments.isEmpty()) {

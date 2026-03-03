@@ -10,13 +10,29 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Handles loading and saving tasks to and from a file.
+ */
 public class Storage {
     private final String filePath;
 
+    /**
+     * Constructs a Storage instance pointing to the specified file.
+     *
+     * @param folder   The folder containing the data file.
+     * @param fileName The name of the data file.
+     */
     public Storage(String folder, String fileName) {
         this.filePath = folder + File.separator + fileName; 
     }
 
+    /**
+     * Loads tasks from the data file.
+     * Creates the file and its parent directories if they do not exist.
+     *
+     * @return An {@code ArrayList} of tasks loaded from the file.
+     * @throws JeffException If the file cannot be read.
+     */
     public ArrayList<Task> loadTasks() throws JeffException {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
@@ -56,6 +72,12 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * Saves all tasks in the given TaskList to the data file.
+     *
+     * @param tasks The TaskList whose tasks should be saved.
+     * @throws IOException If the file cannot be written.
+     */
     public void saveTasks(TaskList tasks) throws IOException {
         FileWriter fw = new FileWriter(filePath);
 
@@ -79,7 +101,6 @@ public class Storage {
         } else if (task instanceof Event e) {
             return "E | " + done + " | " + e.getTask() + " | " + e.getFrom() + " | " + e.getTo();
         } else {
-            // fallback
             return "T | " + done + " | " + task.getTask();
         }
     }
